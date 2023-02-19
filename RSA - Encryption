@@ -1,0 +1,72 @@
+#include<iostream>
+#include<vector>
+#include<string>
+#include<cmath>
+#include<tuple>
+#include<map>
+#include<sstream>
+#include<algorithm>
+#include<set>
+#include<queue>
+#include <cstdint>
+ 
+#define ll unsigned long long
+
+std::ostream&
+operator<<( std::ostream& dest, __int128_t value )
+{
+    std::ostream::sentry s( dest );
+    if ( s ) {
+        __uint128_t tmp = value < 0 ? -value : value;
+        char buffer[ 128 ];
+        char* d = std::end( buffer );
+        do
+        {
+            -- d;
+            *d = "0123456789"[ tmp % 10 ];
+            tmp /= 10;
+        } while ( tmp != 0 );
+        if ( value < 0 ) {
+            -- d;
+            *d = '-';
+        }
+        int len = std::end( buffer ) - d;
+        if ( dest.rdbuf()->sputn( d, len ) != len ) {
+            dest.setstate( std::ios_base::badbit );
+        }
+    }
+    return dest;
+}
+ 
+using namespace std;
+__int128 power(ll a, ll b, ll mod) {
+    __int128 res = 1;
+    __int128 base = a;
+    while (b > 0) {
+        if (b % 2 == 1) res = ((res % mod) * (base % mod)) % mod;
+        base = ((base % mod) * (base % mod)) % mod;
+        b >>= 1;
+    }
+    return res;
+}
+ 
+ 
+int main() {
+    cin.tie(0);
+    ios_base::sync_with_stdio(false);
+    ll n, e;
+    string m;
+    cin >> n >> e >> m;
+    __int128 res[m.length()] = {0};
+    ll cur = 0;
+    for (auto c: m) {
+        ll t = c;
+        res[cur] = power(t, e, n);
+        cur++;
+    }
+    for (unsigned int i = 0; i < cur - 1; i++) {
+        cout << res[i] << ',';
+    }
+    cout << res[cur - 1];
+    return 0;
+}
